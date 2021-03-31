@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,7 +29,7 @@ namespace StudyC____
 
             Console.WriteLine( DateTime.Now );
 
-            var t = new Timer
+            var t = new System.Windows.Forms.Timer
             {
                 Interval = 13,
                 Enabled  = true
@@ -37,22 +38,31 @@ namespace StudyC____
             t.Tick += (object sender, EventArgs e) => {
                 if(count < 500)
                 {
-                    Parallel.For( 0, 1000, n => { 
+                    Parallel.For( 0, 500, n => { 
                         timeList.Add((DateTime.Now - date).Milliseconds);
                         count++;
-                        Console.WriteLine( count );
+                        TestAction( count, c => { Console.WriteLine( c ); } );
                     } );
                 }
                 else
                 {
                     t.Stop();
-                    Console.WriteLine( timeList.Count( ( v ) => v < 13 ) );
+
+                    var r = from v in timeList where v > 10 select v;
+
+                    Console.WriteLine( r.Count() );
                 }
                 date = DateTime.Now;
 
             };
 
-
+        }
+        public void TestAction(int a, Action<int> callback)
+        {
+            Console.WriteLine( "処理中" );
+            Thread.Sleep( 100 );
+            Console.WriteLine("処理完了");
+            callback( a * 2 );
         }
     }
 }
