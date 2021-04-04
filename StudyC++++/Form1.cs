@@ -16,7 +16,20 @@ namespace StudyC____
     {
         public Form1()
         {
-            Test();
+            Test2();
+        }
+
+        public void Test2()
+        {
+            BaseClass b = new Class1( 10 );
+            b.Add( 10 );
+            ClassTest( b );
+            Console.Write( b.count );
+        }
+
+        void ClassTest(dynamic d)
+        {
+            d.Dec( 10 );
         }
 
         [Conditional("DEBUG")]
@@ -63,6 +76,32 @@ namespace StudyC____
             Thread.Sleep( 100 );
             Console.WriteLine("処理完了");
             callback( a * 2 );
+        }
+    }
+
+    class BaseClass
+    {
+        public int count;
+        public BaseClass(int num)
+        {
+            count = num;
+        }
+
+        public void Add(int num)
+        {
+            count += num;
+        }
+    }
+
+    class Class1 : BaseClass
+    {
+        public Class1( int num ) : base( num )
+        {
+        }
+
+        public void Dec(int num)
+        {
+            count -= num;
         }
     }
 }
